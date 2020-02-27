@@ -1,4 +1,4 @@
-package it.danieltrosko.lsauto.pojo;
+package it.danieltrosko.lsauto.model;
 
 
 public class LoginModel {

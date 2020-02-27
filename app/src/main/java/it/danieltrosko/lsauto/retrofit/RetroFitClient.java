@@ -1,4 +1,4 @@
-package it.danieltrosko.lsauto;
+package it.danieltrosko.lsauto.retrofit;
 
 
 import okhttp3.OkHttpClient;

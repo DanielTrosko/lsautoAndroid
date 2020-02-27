@@ -3,17 +3,20 @@ package it.danieltrosko.lsauto;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import it.danieltrosko.lsauto.pojo.LoginModel;
+import it.danieltrosko.lsauto.model.LoginModel;
+import it.danieltrosko.lsauto.model.Token;
+import it.danieltrosko.lsauto.retrofit.APIInterface;
+import it.danieltrosko.lsauto.retrofit.UnsafeOkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,10 +28,10 @@ public class LoginActivity extends AppCompatActivity {
     EditText email;
     EditText password;
     Button loginButton;
-    TextView code;
     Retrofit retrofit;
     APIInterface apiInterface;
     LoginModel loginModel;
+    SharedPreferences myPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,8 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.emailEditText);
         password = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
-        code = findViewById(R.id.code);
+        myPreferences = getSharedPreferences("lsauto", MODE_PRIVATE);
+        SharedPreferences.Editor editor = myPreferences.edit();
 
         loginButton.setOnClickListener(v -> {
             //
@@ -48,17 +52,20 @@ public class LoginActivity extends AppCompatActivity {
                     .create();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8080")
+                    .baseUrl("https://10.0.2.2:443")
+                    .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
             apiInterface = retrofit.create(APIInterface.class);
 
-            Call<LoginModel> login = apiInterface.login(loginModel);
-            login.enqueue(new Callback<LoginModel>() {
+            Call<Token> login = apiInterface.login(loginModel);
+            login.enqueue(new Callback<Token>() {
                 @Override
-                public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
-
-                    if (response.code() == 200) {
+                public void onResponse(Call<Token> call, Response<Token> response) {
+                    if (response.isSuccessful() & response.code() == 200) {
+                        assert response.body() != null;
+                        editor.putString("token", response.body().getToken());
+                        editor.apply();
                         Toast.makeText(getApplicationContext(), "Logged in ", Toast.LENGTH_SHORT).show();
                         Intent main = new Intent(getApplicationContext(), Main2Activity.class);
                         startActivity(main);
@@ -68,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<LoginModel> call, Throwable t) {
+                public void onFailure(Call<Token> call, Throwable t) {
                     Toast.makeText(getApplicationContext(), "Connection error", Toast.LENGTH_SHORT).show();
                 }
             });
