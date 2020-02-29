@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import it.danieltrosko.lsauto.R;
+import it.danieltrosko.lsauto.ShowActualRepair;
+import it.danieltrosko.lsauto.ShowCars;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -29,7 +31,19 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        Fragment fragment = null;
+        switch (position) {
+            case 0:
+                fragment = ShowCars.newInstance(position);
+                break;
+            case 1:
+                fragment = ShowActualRepair.newInstance(position);
+                break;
+        }
+        return fragment;
+
+//        return PlaceholderFragment.newInstance(position + 1);
+
     }
 
     @Nullable
