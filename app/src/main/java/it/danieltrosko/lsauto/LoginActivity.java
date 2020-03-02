@@ -13,6 +13,9 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+
+import it.danieltrosko.lsauto.model.Car;
 import it.danieltrosko.lsauto.model.LoginModel;
 import it.danieltrosko.lsauto.model.Token;
 import it.danieltrosko.lsauto.retrofit.APIInterface;

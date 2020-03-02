@@ -1,12 +1,16 @@
 package it.danieltrosko.lsauto.ui.main;
 
 import android.content.Context;
+import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import org.json.JSONException;
 
 import it.danieltrosko.lsauto.R;
 import it.danieltrosko.lsauto.ShowActualRepair;

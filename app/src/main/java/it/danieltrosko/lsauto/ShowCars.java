@@ -1,16 +1,47 @@
 package it.danieltrosko.lsauto;
 
+
+import android.content.SharedPreferences;
+import android.graphics.Color;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
+
+
+import de.codecrafters.tableview.TableView;
+import de.codecrafters.tableview.listeners.TableDataClickListener;
+import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
+import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import it.danieltrosko.lsauto.model.Car;
+import it.danieltrosko.lsauto.pojo.CarPojo;
+import it.danieltrosko.lsauto.retrofit.APIInterface;
+import it.danieltrosko.lsauto.retrofit.UnsafeOkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class ShowCars extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private String[] headers = {"Marka", "Model", "Silnik", "Rocznik", "Nr rejestracyjny"};
+    private String[][] space;
+    private ArrayList<Car> cars = new ArrayList<>();
 
 
     public static ShowCars newInstance(int index) {
@@ -22,6 +53,84 @@ public class ShowCars extends Fragment {
     }
 
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+
+        final TableView<String[]> table = view.findViewById(R.id.tableView);
+        table.setColumnCount(5);
+        table.setHeaderBackgroundColor(Color.parseColor("#3ECE86"));
+
+//TODO
+// Add new activity with car details.
+
+        table.addDataClickListener(new TableDataClickListener<String[]>() {
+            @Override
+            public void onDataClicked(int rowIndex, String[] clickedData) {
+                Toast.makeText(getContext(), "CLick click ", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //
+
+
+        ArrayList<CarPojo> data = new ArrayList<>();
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://10.0.2.2:443")
+                .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        APIInterface apiInterface = retrofit.create(APIInterface.class);
+        SharedPreferences myPreference = getContext().getSharedPreferences("lsauto", MODE_PRIVATE);
+        Call<ArrayList<CarPojo>> call = apiInterface.getAllCars(myPreference.getString("token", ""));
+        call.enqueue(new Callback<ArrayList<CarPojo>>() {
+            @Override
+            public void onResponse(Call<ArrayList<CarPojo>> call, Response<ArrayList<CarPojo>> response) {
+
+                if (response.isSuccessful()) {
+                    data.addAll(response.body());
+
+                    for (int i = 0; i < data.size(); i++) {
+                        Car car = new Car();
+                        car.setMark(data.get(i).getMark());
+                        car.setModel(data.get(i).getModel());
+                        car.setYear(data.get(i).getYear());
+                        car.setEngineDesignation(data.get(i).getEngineDesignation());
+                        car.setPlateNumber(data.get(i).getPlateNumber());
+                        cars.add(car);
+
+                    }
+                }
+
+                space = new String[cars.size()][5];
+
+                for (int i = 0; i < cars.size(); i++) {
+                    Car car = cars.get(i);
+
+                    space[i][0] = car.getMark();
+                    space[i][1] = car.getModel();
+                    space[i][2] = car.getEngineDesignation();
+                    space[i][3] = car.getYear();
+                    space[i][4] = car.getPlateNumber();
+
+                }
+                table.setHeaderAdapter(new SimpleTableHeaderAdapter(getContext(), headers));
+                table.setDataAdapter(new SimpleTableDataAdapter(getContext(), space));
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<CarPojo>> call, Throwable t) {
+
+            }
+        });
+
+
+        //
+    }
 
 
     @Nullable
@@ -29,7 +138,4 @@ public class ShowCars extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.show_cars_layout, container, false);
     }
-
-
-
 }
