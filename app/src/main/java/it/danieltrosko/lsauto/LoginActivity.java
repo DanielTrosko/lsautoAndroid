@@ -13,9 +13,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
 
-import it.danieltrosko.lsauto.model.Car;
 import it.danieltrosko.lsauto.model.LoginModel;
 import it.danieltrosko.lsauto.model.Token;
 import it.danieltrosko.lsauto.retrofit.APIInterface;
@@ -34,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     Retrofit retrofit;
     APIInterface apiInterface;
     LoginModel loginModel;
-    SharedPreferences myPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.emailEditText);
         password = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
-        myPreferences = getSharedPreferences("lsauto", MODE_PRIVATE);
-        SharedPreferences.Editor editor = myPreferences.edit();
+
 
         loginButton.setOnClickListener(v -> {
             //
@@ -67,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<Token> call, Response<Token> response) {
                     if (response.isSuccessful() & response.code() == 200) {
                         assert response.body() != null;
+                        SharedPreferences.Editor editor = getSharedPreferences("lsauto", MODE_PRIVATE).edit();
                         editor.putString("token", response.body().getToken());
                         editor.apply();
                         Toast.makeText(getApplicationContext(), "Logged in ", Toast.LENGTH_SHORT).show();

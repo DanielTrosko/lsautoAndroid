@@ -55,8 +55,6 @@ public class ShowCars extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-
         final TableView<String[]> table = view.findViewById(R.id.tableView);
         table.setColumnCount(5);
         table.setHeaderBackgroundColor(Color.parseColor("#3ECE86"));
@@ -85,8 +83,9 @@ public class ShowCars extends Fragment {
                 .build();
 
         APIInterface apiInterface = retrofit.create(APIInterface.class);
-        SharedPreferences myPreference = getContext().getSharedPreferences("lsauto", MODE_PRIVATE);
-        Call<ArrayList<CarPojo>> call = apiInterface.getAllCars(myPreference.getString("token", ""));
+        SharedPreferences myPreference = getActivity().getSharedPreferences("lsauto", MODE_PRIVATE);
+        String token = myPreference.getString("token", "");
+        Call<ArrayList<CarPojo>> call = apiInterface.getAllCars("Bearer " + token);
         call.enqueue(new Callback<ArrayList<CarPojo>>() {
             @Override
             public void onResponse(Call<ArrayList<CarPojo>> call, Response<ArrayList<CarPojo>> response) {

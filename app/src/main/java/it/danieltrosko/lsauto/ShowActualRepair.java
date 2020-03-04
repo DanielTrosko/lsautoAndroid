@@ -90,8 +90,9 @@ public class ShowActualRepair extends Fragment {
                 .build();
 
         APIInterface apiInterface = retrofit.create(APIInterface.class);
-        SharedPreferences myPreference = getContext().getSharedPreferences("lsauto", MODE_PRIVATE);
-        Call<ArrayList<ShowActualRepairPojo>> call = apiInterface.getActualRepairCars(myPreference.getString("token", ""));
+        SharedPreferences myPreference = getActivity().getSharedPreferences("lsauto", MODE_PRIVATE);
+        String token = myPreference.getString("token", "");
+        Call<ArrayList<ShowActualRepairPojo>> call = apiInterface.getActualRepairCars("Bearer " + token);
         call.enqueue(new Callback<ArrayList<ShowActualRepairPojo>>() {
             @Override
             public void onResponse(Call<ArrayList<ShowActualRepairPojo>> call, Response<ArrayList<ShowActualRepairPojo>> response) {
