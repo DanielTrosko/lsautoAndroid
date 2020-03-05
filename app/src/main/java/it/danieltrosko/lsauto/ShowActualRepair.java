@@ -17,6 +17,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
+import de.codecrafters.tableview.TableHeaderAdapter;
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
@@ -64,7 +65,7 @@ public class ShowActualRepair extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final TableView<String[]> table = view.findViewById(R.id.tableViewShowActualRepair);
         table.setColumnCount(4);
-        table.setHeaderBackgroundColor(Color.parseColor("#3ECE86"));
+        table.setHeaderBackgroundColor(Color.parseColor("#DCDCDC"));
 
 //TODO
 // Add new activity with repair details.

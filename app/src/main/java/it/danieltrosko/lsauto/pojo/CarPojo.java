@@ -4,7 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class CarPojo {
-
+    @SerializedName("id")
+    @Expose
+    private String id;
     @SerializedName("mark")
     @Expose
     private String mark;
@@ -14,12 +16,29 @@ public class CarPojo {
     @SerializedName("engineDesignation")
     @Expose
     private String engineDesignation;
+    @SerializedName("engineCode")
+    @Expose
+    private String engineCode;
     @SerializedName("year")
     @Expose
     private String year;
     @SerializedName("plateNumber")
     @Expose
     private String plateNumber;
+    @SerializedName("chassisNumber")
+    @Expose
+    private String chassisNumber;
+    @SerializedName("meterReading")
+    @Expose
+    private String meterReading;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getMark() {
         return mark;
@@ -45,6 +64,14 @@ public class CarPojo {
         this.engineDesignation = engineDesignation;
     }
 
+    public String getEngineCode() {
+        return engineCode;
+    }
+
+    public void setEngineCode(String engineCode) {
+        this.engineCode = engineCode;
+    }
+
     public String getYear() {
         return year;
     }
@@ -59,5 +86,21 @@ public class CarPojo {
 
     public void setPlateNumber(String plateNumber) {
         this.plateNumber = plateNumber;
+    }
+
+    public String getChassisNumber() {
+        return chassisNumber;
+    }
+
+    public void setChassisNumber(String chassisNumber) {
+        this.chassisNumber = chassisNumber;
+    }
+
+    public String getMeterReading() {
+        return meterReading;
+    }
+
+    public void setMeterReading(String meterReading) {
+        this.meterReading = meterReading;
     }
 }

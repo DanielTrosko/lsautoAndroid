@@ -4,6 +4,8 @@
     package="it.danieltrosko.lsauto">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,9 +16,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".CarAcceptanceForm"
-            android:parentActivityName=".Main2Activity"
-            ></activity>
+        <activity
+            android:name=".ShowCarDetails"
+            android:parentActivityName=".Main2Activity" />
+        <activity
+            android:name=".CarAcceptanceForm"
+            android:parentActivityName=".Main2Activity" />
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"

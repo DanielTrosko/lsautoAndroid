@@ -1,6 +1,7 @@
 package it.danieltrosko.lsauto;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
@@ -8,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +42,7 @@ public class ShowCars extends Fragment {
     private String[] headers = {"Marka", "Model", "Silnik", "Rocznik", "Nr rejestracyjny"};
     private String[][] space;
     private ArrayList<Car> cars = new ArrayList<>();
+    private ArrayList<CarPojo> data;
 
 
     public static ShowCars newInstance(int index) {
@@ -57,21 +58,10 @@ public class ShowCars extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final TableView<String[]> table = view.findViewById(R.id.tableView);
         table.setColumnCount(5);
-        table.setHeaderBackgroundColor(Color.parseColor("#3ECE86"));
-
-//TODO
-// Add new activity with car details.
-
-        table.addDataClickListener(new TableDataClickListener<String[]>() {
-            @Override
-            public void onDataClicked(int rowIndex, String[] clickedData) {
-                Toast.makeText(getContext(), "CLick click ", Toast.LENGTH_SHORT).show();
-            }
-        });
-        //
+        table.setHeaderBackgroundColor(Color.parseColor("#DCDCDC"));
 
 
-        ArrayList<CarPojo> data = new ArrayList<>();
+        data = new ArrayList<>();
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -95,10 +85,14 @@ public class ShowCars extends Fragment {
 
                     for (int i = 0; i < data.size(); i++) {
                         Car car = new Car();
+                        car.setId(data.get(i).getId());
                         car.setMark(data.get(i).getMark());
                         car.setModel(data.get(i).getModel());
                         car.setYear(data.get(i).getYear());
                         car.setEngineDesignation(data.get(i).getEngineDesignation());
+                        car.setEngineCode(data.get(i).getEngineCode());
+                        car.setChassisNumber(data.get(i).getChassisNumber());
+                        car.setMeterReading(data.get(i).getMeterReading());
                         car.setPlateNumber(data.get(i).getPlateNumber());
                         cars.add(car);
 
@@ -121,13 +115,29 @@ public class ShowCars extends Fragment {
                 table.setDataAdapter(new SimpleTableDataAdapter(getContext(), space));
             }
 
+
             @Override
             public void onFailure(Call<ArrayList<CarPojo>> call, Throwable t) {
 
             }
         });
 
-
+        table.addDataClickListener(new TableDataClickListener<String[]>() {
+            @Override
+            public void onDataClicked(int rowIndex, String[] clickedData) {
+                Intent main = new Intent(getContext(), ShowCarDetails.class);
+                main.putExtra("id", data.get(rowIndex).getId());
+                main.putExtra("mark", data.get(rowIndex).getMark());
+                main.putExtra("model", data.get(rowIndex).getModel());
+                main.putExtra("engineDesignation", data.get(rowIndex).getEngineDesignation());
+                main.putExtra("engineCode", data.get(rowIndex).getEngineCode());
+                main.putExtra("year", data.get(rowIndex).getYear());
+                main.putExtra("plateNumber", data.get(rowIndex).getPlateNumber());
+                main.putExtra("chassisNumber", data.get(rowIndex).getChassisNumber());
+                main.putExtra("meterReading", data.get(rowIndex).getMeterReading());
+                startActivity(main);
+            }
+        });
         //
     }
 

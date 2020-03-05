@@ -100,11 +100,14 @@ public class CarAcceptanceForm extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Przyjeto nowe auto", Toast.LENGTH_SHORT).show();
                             Intent main = new Intent(getApplicationContext(), Main2Activity.class);
                             startActivity(main);
+                        }else {
+                            Toast.makeText(getApplicationContext(), "Wypełnij prawidłowo pola", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "Cannot connect to server", Toast.LENGTH_SHORT).show();
 
                     }
                 });
