@@ -17,20 +17,18 @@ import com.google.gson.GsonBuilder;
 import it.danieltrosko.lsauto.model.LoginModel;
 import it.danieltrosko.lsauto.model.Token;
 import it.danieltrosko.lsauto.retrofit.APIInterface;
-import it.danieltrosko.lsauto.retrofit.UnsafeOkHttpClient;
+import it.danieltrosko.lsauto.retrofit.ApiClient;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class LoginActivity extends AppCompatActivity {
 
     EditText email;
     EditText password;
     Button loginButton;
-    Retrofit retrofit;
-    APIInterface apiInterface;
     LoginModel loginModel;
 
 
@@ -45,18 +43,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
         loginButton.setOnClickListener(v -> {
-            //
-            loginModel = new LoginModel(email.getText().toString(), password.getText().toString());
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
 
-            retrofit = new Retrofit.Builder()
-                    .baseUrl("https://10.0.2.2:443")
-                    .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
-            apiInterface = retrofit.create(APIInterface.class);
+            loginModel = new LoginModel(email.getText().toString(), password.getText().toString());
+
+            APIInterface apiInterface = ApiClient.getClient().create(APIInterface.class);
 
             Call<Token> login = apiInterface.login(loginModel);
             login.enqueue(new Callback<Token>() {
@@ -80,13 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Connection error", Toast.LENGTH_SHORT).show();
                 }
             });
-            //
+
         });
-
-
-//
-
-//
-
     }
 }

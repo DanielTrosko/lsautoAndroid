@@ -12,12 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 
 import java.util.ArrayList;
 
-import de.codecrafters.tableview.TableHeaderAdapter;
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.listeners.TableDataClickListener;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
@@ -25,12 +23,11 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import it.danieltrosko.lsauto.model.ActualRepair;
 import it.danieltrosko.lsauto.pojo.ShowActualRepairPojo;
 import it.danieltrosko.lsauto.retrofit.APIInterface;
-import it.danieltrosko.lsauto.retrofit.UnsafeOkHttpClient;
+import it.danieltrosko.lsauto.retrofit.ApiClient;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -76,21 +73,10 @@ public class ShowActualRepair extends Fragment {
                 Toast.makeText(getContext(), "CLick click ", Toast.LENGTH_SHORT).show();
             }
         });
-        //
-
 
         ArrayList<ShowActualRepairPojo> data = new ArrayList<>();
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://10.0.2.2:443")
-                .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        APIInterface apiInterface = retrofit.create(APIInterface.class);
+        APIInterface apiInterface = ApiClient.getClient().create(APIInterface.class);
         SharedPreferences myPreference = getActivity().getSharedPreferences("lsauto", MODE_PRIVATE);
         String token = myPreference.getString("token", "");
         Call<ArrayList<ShowActualRepairPojo>> call = apiInterface.getActualRepairCars("Bearer " + token);

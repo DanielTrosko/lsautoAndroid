@@ -1,39 +1,66 @@
 package it.danieltrosko.lsauto.model;
 
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class CarAcceptance {
 
     private Long carId;
+
     private String mark;
+
     private String model;
+
     private String engineDesignation;
+
     private String engineCode;
+
     private String year;
+
     private String plateNumber;
+
     private String chassisNumber;
+
     private String meterReading;
 
     //repair
+
     private String scopeOfWork;
+
     private String faultsReportedByCustomer;
+
     private String estimatedRepairPrice;
+
     private String status;
+
     private String dataOfPickup;
 
 
     //user
+
     private String email;
+
     private String firstName;
+
     private String surname;
+
     private String phoneNumber;
 
     //address
+
     private Long addressId;
+
     private String street;
+
     private String houseNumber;
+
     private String apartmentNumber;
+
     private String postCode;
+
     private String city;
+
 
     public CarAcceptance() {
     }
