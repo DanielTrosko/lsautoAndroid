@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
 
-
         loginButton.setOnClickListener(v -> {
 
             loginModel = new LoginModel(email.getText().toString(), password.getText().toString());
