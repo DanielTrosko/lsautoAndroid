@@ -3,7 +3,6 @@
 Workshop management application
 Integrated with the application
 [LSAuto](https://github.com/DanielTrosko/lsauto)
-
 ## Program features
 ```
 * Login
@@ -17,3 +16,6 @@ Integrated with the application
 ``````
 * Retrofit
 * Codecrafters tableview
+``````
+
+![Image of Yaktocat](http://51.178.52.250/lsAutoGif.gif)
