@@ -18,4 +18,4 @@ Integrated with the application
 * Codecrafters tableview
 ``````
 
-![Image of Yaktocat](http://51.178.52.250/lsAutoGif.gif)
+![gif](http://51.178.52.250/lsautogif.gif)
