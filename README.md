@@ -1,8 +1,9 @@
 # Project LSAutoAndroid
-```
+
 Workshop management application
-Integrated with the application [LSAuto](https://github.com/DanielTrosko/lsauto)
-```
+Integrated with the application
+[LSAuto](https://github.com/DanielTrosko/lsauto)
+
 ## Program features
 ```
 * Login
