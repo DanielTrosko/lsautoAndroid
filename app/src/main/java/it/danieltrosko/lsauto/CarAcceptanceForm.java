@@ -47,6 +47,7 @@ public class CarAcceptanceForm extends AppCompatActivity {
 
     private ArrayList<Bitmap> bitmaps = new ArrayList<>();
     private ArrayList<byte[]> bytesPhoto = new ArrayList<>();
+    final LoadingDIalog loadingDialog = new LoadingDIalog(CarAcceptanceForm.this);
 
 
     @Override
@@ -95,6 +96,7 @@ public class CarAcceptanceForm extends AppCompatActivity {
 
 
         send.setOnClickListener(v -> {
+            loadingDialog.start();
             CarAcceptance carAcceptance = new CarAcceptance();
 
             carAcceptance.setMark(mark.getText().toString());
@@ -136,24 +138,15 @@ public class CarAcceptanceForm extends AppCompatActivity {
             param.put("faultsReportedByCustomer", faultsReportedByCustomer.getText().toString());
             param.put("estimatedRepairPrice", estimatedRepairPrice.getText().toString());
 
-            MultipartBody.Part photoOne = null;
-            MultipartBody.Part photoTwo = null;
-            MultipartBody.Part photoThree = null;
-            MultipartBody.Part photoFour = null;
 
-            if (bytesPhoto.size() <= 0) {
-                photoOne = MultipartBody.Part.createFormData
-                        ("photoOne", "photoOne", RequestBody.create(bytesPhoto.get(0)));
-                photoTwo = MultipartBody.Part.createFormData
-                        ("photoTwo", "photoTwo", RequestBody.create(bytesPhoto.get(1)));
-                photoThree = MultipartBody.Part.createFormData
-                        ("photoThree", "photoThree", RequestBody.create(bytesPhoto.get(2)));
-                photoFour = MultipartBody.Part.createFormData
-                        ("photoFour", "photoFour", RequestBody.create(bytesPhoto.get(3)));
-
-            } else {
-                Toast.makeText(getApplicationContext(), "Dodaj zdjęcia", Toast.LENGTH_SHORT).show();
-            }
+            MultipartBody.Part photoOne = photoOne = MultipartBody.Part.createFormData
+                    ("photoOne", "photoOne", RequestBody.create(bytesPhoto.get(0)));
+            MultipartBody.Part photoTwo = photoTwo = MultipartBody.Part.createFormData
+                    ("photoTwo", "photoTwo", RequestBody.create(bytesPhoto.get(1)));
+            MultipartBody.Part photoThree = photoThree = MultipartBody.Part.createFormData
+                    ("photoThree", "photoThree", RequestBody.create(bytesPhoto.get(2)));
+            MultipartBody.Part photoFour = photoFour = MultipartBody.Part.createFormData
+                    ("photoFour", "photoFour", RequestBody.create(bytesPhoto.get(3)));
 
 
             APIInterface apiInterface = ApiClient.getClient().create(APIInterface.class);
@@ -162,6 +155,7 @@ public class CarAcceptanceForm extends AppCompatActivity {
 
 
             Call<ResponseBody> addnewCarAcceptance = apiInterface.addNewCarAcceptance("Bearer " + token, param, photoOne, photoTwo, photoThree, photoFour);
+
 
             addnewCarAcceptance.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -173,12 +167,13 @@ public class CarAcceptanceForm extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Wypełnij prawidłowo pola", Toast.LENGTH_SHORT).show();
                     }
+                    loadingDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Toast.makeText(getApplicationContext(), "Brak połączenia", Toast.LENGTH_SHORT).show();
-
+                    loadingDialog.dismiss();
                 }
             });
 
