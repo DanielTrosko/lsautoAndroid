@@ -39,6 +39,8 @@ public class ShowCars extends Fragment {
     private String[][] space;
     private ArrayList<Car> cars = new ArrayList<>();
     private ArrayList<CarPojo> data;
+    final LoadingDIalog loadingDialog = new LoadingDIalog(ShowCars.this);
+
 
 
     public static ShowCars newInstance(int index) {
@@ -52,6 +54,7 @@ public class ShowCars extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        loadingDialog.startFragment();
         final TableView<String[]> table = view.findViewById(R.id.tableView);
         table.setColumnCount(5);
         table.setHeaderBackgroundColor(Color.parseColor("#DCDCDC"));
@@ -101,6 +104,7 @@ public class ShowCars extends Fragment {
                 }
                 table.setHeaderAdapter(new SimpleTableHeaderAdapter(getContext(), headers));
                 table.setDataAdapter(new SimpleTableDataAdapter(getContext(), space));
+                loadingDialog.dismiss();
             }
 
 

@@ -9,7 +9,6 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
 
 import it.danieltrosko.lsauto.ui.main.SectionsPagerAdapter;
 
@@ -28,12 +27,9 @@ public class Main2Activity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent carAcceptance = new Intent(getApplicationContext(), CarAcceptanceForm.class);
-                startActivity(carAcceptance);
-            }
+        fab.setOnClickListener(v -> {
+            Intent carAcceptance = new Intent(getApplicationContext(), CarAcceptanceForm.class);
+            startActivity(carAcceptance);
         });
 
 

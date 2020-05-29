@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import it.danieltrosko.lsauto.model.CarAcceptance;
 import it.danieltrosko.lsauto.retrofit.APIInterface;
@@ -71,7 +73,7 @@ public class CarAcceptanceForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_acceptance_form);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         EditText mark = findViewById(R.id.carAcceptanceMarkEditText);
         EditText model = findViewById(R.id.carAcceptanceModelEditText);
         EditText year = findViewById(R.id.carAcceptanceYearEditText);
@@ -97,85 +99,85 @@ public class CarAcceptanceForm extends AppCompatActivity {
 
         send.setOnClickListener(v -> {
             loadingDialog.start();
-            CarAcceptance carAcceptance = new CarAcceptance();
-
-            carAcceptance.setMark(mark.getText().toString());
-            carAcceptance.setModel(model.getText().toString());
-            carAcceptance.setYear(year.getText().toString());
-            carAcceptance.setPlateNumber(plateNumber.getText().toString());
-            carAcceptance.setChassisNumber(chassisNumber.getText().toString());
-            carAcceptance.setMeterReading(meterReading.getText().toString());
-            carAcceptance.setEmail(email.getText().toString());
-            carAcceptance.setFirstName(name.getText().toString());
-            carAcceptance.setSurname(surname.getText().toString());
-            carAcceptance.setPhoneNumber(phoneNumber.getText().toString());
-            carAcceptance.setStreet(street.getText().toString());
-            carAcceptance.setApartmentNumber(apartmentNumber.getText().toString());
-            carAcceptance.setHouseNumber(houseNumber.getText().toString());
-            carAcceptance.setPostCode(postCode.getText().toString());
-            carAcceptance.setCity(city.getText().toString());
-            carAcceptance.setFaultsReportedByCustomer(faultsReportedByCustomer.getText().toString());
-            carAcceptance.setEstimatedRepairPrice(estimatedRepairPrice.getText().toString());
-            carAcceptance.setStatus(LocalDate.now().toString());
-            carAcceptance.setStatus("ACCEPTED");
 
             Map<String, String> param = new HashMap<>();
-            param.put("mark", mark.getText().toString());
-            param.put("model", model.getText().toString());
-            param.put("year", year.getText().toString());
-            param.put("plateNumber", plateNumber.getText().toString());
-            param.put("chassisNumber", chassisNumber.getText().toString());
-            param.put("meterReading", meterReading.getText().toString());
-            param.put("email", email.getText().toString());
-            param.put("firstName", name.getText().toString());
-            param.put("surname", surname.getText().toString());
-            param.put("phoneNumber", phoneNumber.getText().toString());
-            param.put("street", street.getText().toString());
-            param.put("apartmentNumber", apartmentNumber.getText().toString());
-            param.put("houseNumber", houseNumber.getText().toString());
-            param.put("postCode", postCode.getText().toString());
-            param.put("city", city.getText().toString());
-            param.put("faultsReportedByCustomer", faultsReportedByCustomer.getText().toString());
-            param.put("estimatedRepairPrice", estimatedRepairPrice.getText().toString());
+            param.put("mark", String.valueOf(mark.getText()));
+            param.put("model", String.valueOf(model.getText()));
+            param.put("year", String.valueOf(year.getText()));
+            param.put("plateNumber", String.valueOf(plateNumber.getText()));
+            param.put("chassisNumber", String.valueOf(chassisNumber.getText()));
+            param.put("meterReading", String.valueOf(meterReading.getText()));
+            param.put("email", String.valueOf(email.getText()));
+            param.put("firstName", String.valueOf(name.getText()));
+            param.put("surname", String.valueOf(surname.getText()));
+            param.put("phoneNumber", String.valueOf(phoneNumber.getText()));
+            param.put("street", String.valueOf(street.getText()));
+            param.put("apartmentNumber", String.valueOf(apartmentNumber.getText()));
+            param.put("houseNumber", String.valueOf(houseNumber.getText()));
+            param.put("postCode", String.valueOf(postCode.getText()));
+            param.put("city", String.valueOf(city.getText()));
+            param.put("faultsReportedByCustomer", String.valueOf(faultsReportedByCustomer.getText()));
+            param.put("estimatedRepairPrice", String.valueOf(estimatedRepairPrice.getText()));
 
 
-            MultipartBody.Part photoOne = photoOne = MultipartBody.Part.createFormData
-                    ("photoOne", "photoOne", RequestBody.create(bytesPhoto.get(0)));
-            MultipartBody.Part photoTwo = photoTwo = MultipartBody.Part.createFormData
-                    ("photoTwo", "photoTwo", RequestBody.create(bytesPhoto.get(1)));
-            MultipartBody.Part photoThree = photoThree = MultipartBody.Part.createFormData
-                    ("photoThree", "photoThree", RequestBody.create(bytesPhoto.get(2)));
-            MultipartBody.Part photoFour = photoFour = MultipartBody.Part.createFormData
-                    ("photoFour", "photoFour", RequestBody.create(bytesPhoto.get(3)));
+            MultipartBody.Part photoOne = null;
+            MultipartBody.Part photoTwo = null;
+            MultipartBody.Part photoThree = null;
+            MultipartBody.Part photoFour = null;
+
+
+            try {
+                photoOne = photoOne = MultipartBody.Part.createFormData
+                        ("photoOne", "photoOne", RequestBody.create(bytesPhoto.get(0)));
+                photoTwo = photoTwo = MultipartBody.Part.createFormData
+                        ("photoTwo", "photoTwo", RequestBody.create(bytesPhoto.get(1)));
+                photoThree = photoThree = MultipartBody.Part.createFormData
+                        ("photoThree", "photoThree", RequestBody.create(bytesPhoto.get(2)));
+                photoFour = photoFour = MultipartBody.Part.createFormData
+                        ("photoFour", "photoFour", RequestBody.create(bytesPhoto.get(3)));
+            } catch (IndexOutOfBoundsException e) {
+                loadingDialog.dismiss();
+                e.printStackTrace();
+            }
 
 
             APIInterface apiInterface = ApiClient.getClient().create(APIInterface.class);
             SharedPreferences myPreference = getSharedPreferences("lsauto", MODE_PRIVATE);
             String token = myPreference.getString("token", "");
 
+            String emailInput = String.valueOf(email.getText());
+            System.err.println(emailInput);
 
-            Call<ResponseBody> addnewCarAcceptance = apiInterface.addNewCarAcceptance("Bearer " + token, param, photoOne, photoTwo, photoThree, photoFour);
+            if (!emailInput.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
+                if (!bytesPhoto.isEmpty()) {
+                    Call<ResponseBody> addnewCarAcceptance = apiInterface.addNewCarAcceptance("Bearer " + token, param, photoOne, photoTwo, photoThree, photoFour);
+                    addnewCarAcceptance.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Przyjeto nowe auto", Toast.LENGTH_SHORT).show();
+                                Intent main = new Intent(getApplicationContext(), Main2Activity.class);
+                                startActivity(main);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Wypełnij prawidłowo pola", Toast.LENGTH_SHORT).show();
+                            }
+                            loadingDialog.dismiss();
+                        }
 
-
-            addnewCarAcceptance.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(), "Przyjeto nowe auto", Toast.LENGTH_SHORT).show();
-                        Intent main = new Intent(getApplicationContext(), Main2Activity.class);
-                        startActivity(main);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Wypełnij prawidłowo pola", Toast.LENGTH_SHORT).show();
-                    }
-                    loadingDialog.dismiss();
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "Brak połączenia", Toast.LENGTH_SHORT).show();
+                            loadingDialog.dismiss();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Zrób 4 zdjęcia", Toast.LENGTH_SHORT).show();
                 }
 
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Brak połączenia", Toast.LENGTH_SHORT).show();
-                    loadingDialog.dismiss();
-                }
-            });
+
+            } else {
+                Toast.makeText(getApplicationContext(), "Wprowadz poprawny email", Toast.LENGTH_SHORT).show();
+            }
 
 
         });

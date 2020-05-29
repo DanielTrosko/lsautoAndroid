@@ -62,7 +62,8 @@ public class ShowActualRepair extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final TableView<String[]> table = view.findViewById(R.id.tableViewShowActualRepair);
         table.setColumnCount(4);
-        table.setHeaderBackgroundColor(Color.parseColor("#DCDCDC"));
+//        table.setHeaderBackgroundColor(Color.parseColor("#8f8f8f"));
+//        table.setBackgroundColor(Color.parseColor("#c0c0c0"));
 
 //TODO
 // Add new activity with repair details.

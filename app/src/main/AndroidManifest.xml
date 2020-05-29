@@ -43,7 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <provider
             android:authorities="it.danieltrosko.lsauto.fileprovider"
             android:name="androidx.core.content.FileProvider"

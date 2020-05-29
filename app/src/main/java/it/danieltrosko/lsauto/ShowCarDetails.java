@@ -21,7 +21,7 @@ public class ShowCarDetails extends AppCompatActivity {
         TextView header = findViewById(R.id.carDetailHeader);
         header.setText("Samochód " + id);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Car " + id);
+//        actionBar.setTitle("Car " + id);
 
         TextView mark = findViewById(R.id.carShowDetailsMarkTextViewData);
         TextView model = findViewById(R.id.carShowDetailsModelTextViewData);
