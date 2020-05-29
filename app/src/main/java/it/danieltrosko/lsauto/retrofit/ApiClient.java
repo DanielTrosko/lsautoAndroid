@@ -14,8 +14,8 @@ public class ApiClient {
                 .create();
 
         return new Retrofit.Builder()
-                .baseUrl("https://51.178.52.250:443")
-//                .baseUrl("https://10.0.2.2:443")
+//                .baseUrl("https://51.178.52.250:443")
+                .baseUrl("https://10.0.2.2:443")
                 .client(UnsafeOkHttpClient.getUnsafeOkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();

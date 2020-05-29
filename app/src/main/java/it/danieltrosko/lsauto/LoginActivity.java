@@ -10,10 +10,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-
 import it.danieltrosko.lsauto.model.LoginModel;
 import it.danieltrosko.lsauto.model.Token;
 import it.danieltrosko.lsauto.retrofit.APIInterface;
@@ -30,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText password;
     Button loginButton;
     LoginModel loginModel;
+    final LoadingDIalog loadingDIalog = new LoadingDIalog(LoginActivity.this);
 
 
     @Override
@@ -42,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
 
         loginButton.setOnClickListener(v -> {
+            loadingDIalog.start();
+
 
             loginModel = new LoginModel(email.getText().toString(), password.getText().toString());
 
@@ -62,11 +61,13 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Email or password is not correct", Toast.LENGTH_SHORT).show();
                     }
+                    loadingDIalog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<Token> call, Throwable t) {
                     Toast.makeText(getApplicationContext(), "Connection error", Toast.LENGTH_SHORT).show();
+                    loadingDIalog.dismiss();
                 }
             });
 
