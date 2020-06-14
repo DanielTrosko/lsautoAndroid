@@ -18,4 +18,4 @@ Integrated with the application
 * Codecrafters tableview
 ``````
 
-![gif](http://51.178.52.250/lsautogif.gif)
+![gif](https://i.ibb.co/7jRqbGN/ezgif-com-resize.gif)
